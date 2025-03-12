@@ -13,8 +13,8 @@
     };
 
     // **Important:  This is a placeholder.  The actual API key should ONLY be on your server!**
-    const API_KEY = "AIzaSyBk8ibWt_hjH4TsV0jt-bwQeTKGSDuDNjk";
-    const API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=GEMINI_API_KEY';
+    const API_KEY = "AIzaSyBk8ibWt_hjH4TsV0jt-bwQeTKGSDuDNjk"; // Ваш реальный API-ключ
+    const API_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 
     // --------------------------------------------------------------------------
     // Helper Functions
