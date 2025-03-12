@@ -6,14 +6,14 @@
     // Configuration - Add your CSS Selectors here
     // --------------------------------------------------------------------------
     const SELECTORS = {
-        QUESTION_ELEMENT: "div.VQ5oZ > div.yoeer > span:first-child", //Targets the Question 
+        QUESTION_ELEMENT: "div.VQ5oZ > div.yoeer > span:first-child", //Targets the Question
         ANSWER_ELEMENTS: "div.VQ5oZ > div._ZhFj > div.YBX37",       //Targets the Answer divs
-        ANSWER_TEXT_ELEMENT: 'div[aria-readonly="true"] > p'       //Gets text in the p inside of radio button divs.
+        ANSWER_TEXT_ELEMENT: 'div[aria-readonly="true"] > p',       //Gets text in the p inside of radio button divs.
+        ANSWER_RADIO_BUTTON: 'input[type="radio"]' // Selector for radio buttons inside answer elements
     };
 
     // **Important:  This is a placeholder.  The actual API key should ONLY be on your server!**
-    const API_ENDPOINT = 'YOUR_SERVER_API_ENDPOINT';  // Update it and implement this in a secure way
-    const API_KEY = "YOUR_TEST_API_KEY";
+    const API_KEY = "AIzaSyBk8ibWt_hjH4TsV0jt-bwQeTKGSDuDNjk";
 
     // --------------------------------------------------------------------------
     // Helper Functions
@@ -38,14 +38,26 @@
         const answerElements = document.querySelectorAll(SELECTORS.ANSWER_ELEMENTS);
 
         answerElements.forEach(element => {
-            const textContainer = element.querySelector(SELECTORS.ANSWER_TEXT_ELEMENT); //Get the actual answer text container.
+            const textContainer = element.querySelector(SELECTORS.ANSWER_TEXT_ELEMENT); // Get the actual answer text container.
+            const radioButton = element.querySelector(SELECTORS.ANSWER_RADIO_BUTTON); // Find the radio button inside the answer element
+
             if (textContainer.textContent.trim() === correctAnswer.trim()) {
-                element.style.backgroundColor = 'lightgreen'; // Highlight the radio button div
+                element.style.backgroundColor = 'lightgreen'; // Highlight the answer div
+                if (radioButton) {
+                    radioButton.checked = true; // Select the radio button
+                    // Optional: Dispatch events for better compatibility
+                    // radioButton.dispatchEvent(new Event('click', { bubbles: true }));
+                    // radioButton.dispatchEvent(new Event('change', { bubbles: true }));
+                }
             } else {
                 element.style.backgroundColor = ''; // Reset background color
+                if (radioButton) {
+                    radioButton.checked = false; // Unselect radio button for incorrect answers
+                }
             }
         });
     }
+
 
     function analyzeAndHighlight() {
       const data = extractQuestionAndAnswers();
