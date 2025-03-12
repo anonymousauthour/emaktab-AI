@@ -1,5 +1,5 @@
 // emaktab-helper.js
-// @grant        GM_xmlhttpRequest
+@grant        GM_xmlhttpRequest
 (function() {
     'use strict';
 
