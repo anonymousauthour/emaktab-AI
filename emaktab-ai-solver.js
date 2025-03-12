@@ -11,7 +11,9 @@
         ANSWER_TEXT_ELEMENT: 'span' // Span containing the answer text inside radio buttons
     };
 
-    const API_ENDPOINT = 'YOUR_SERVER_API_ENDPOINT';  // **REPLACE THIS!**
+    // PLEASE READ THE SECURITY WARNING BELOW BEFORE USING THIS!
+    const API_KEY = "220a1d391be94cfe95d903bc21df7aaa";  // **REPLACE THIS WITH YOUR TEST API KEY**
+    const API_ENDPOINT = "https://generative-ai-fd.experimental.googleapis.com/v1beta/models/gemini-pro:generateContent";  // Replace the part of this URL after .com if needed.
 
     // --------------------------------------------------------------------------
     // Helper Functions
@@ -46,30 +48,41 @@
         });
     }
 
-    function analyzeAndHighlight() {
+  function analyzeAndHighlight() {
       const data = extractQuestionAndAnswers();
       if (!data) return;
 
-      GM_xmlhttpRequest({
-          method: 'POST',
-          url: API_ENDPOINT,
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          data: JSON.stringify(data),
-          onload: function(response) {
-              if (response.status >= 200 && response.status < 300) {
-                  const data = JSON.parse(response.responseText);
-                  highlightCorrectAnswer(data.best_answer);
-              } else {
-                  console.error('Error from server:', response);
-              }
-          },
-          onerror: function(error) {
-              console.error('Error sending request:', error);
-          }
-      });
-  }
+      // Construct the payload for the Gemini API
+      const payload = {
+          "contents": [{
+              "parts": [{
+                  "text": `Question: ${data.question}\nAnswers: ${data.answers.join("\n")}`  // Create a text prompt
+              }]
+          }]
+      };
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: `${API_ENDPOINT}?key=${API_KEY}`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(payload),
+            onload: function(response) {
+                if (response.status >= 200 && response.status < 300) {
+                    const geminiData = JSON.parse(response.responseText);
+                     // **IMPORTANT:** Adapt this part to the REAL structure of Gemini API responses
+                    const bestAnswer = geminiData.candidates[0].content.parts[0].text.trim();  // May need adjustments
+
+                    highlightCorrectAnswer(bestAnswer);
+                } else {
+                    console.error('Error from server:', response);
+                }
+            },
+            onerror: function(error) {
+                console.error('Error sending request:', error);
+            }
+        });
+    }
      function observeDOM() {
         const targetNode = document.querySelector("#root > div > div.Uq4Vd > div.spmwg");  // Look for a very specific element near test content
         const config = { childList: true, subtree: true };
