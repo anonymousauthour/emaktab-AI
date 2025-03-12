@@ -47,6 +47,25 @@
         });
     }
 
+    function extractQuestionAndAnswers() {
+        const questionElement = document.querySelector(SELECTORS.QUESTION_ELEMENT);
+        const question = questionElement ? questionElement.textContent : null;
+
+        const answerElements = Array.from(document.querySelectorAll(SELECTORS.ANSWER_ELEMENT));
+        const answers = answerElements.map(element => element.querySelector(SELECTORS.ANSWER_TEXT_ELEMENT).textContent.trim());
+
+        console.log("Question Element:", questionElement); //ADDED
+        console.log("Answers Elements:", answerElements); //ADDED
+        console.log("Answers:", answers); //ADDED
+
+        if (!question || answers.length === 0) {
+            console.warn("Could not find question or answers.");
+            return null;
+        }
+
+        return { question, answers };
+    }
+
     function analyzeAndHighlight() {
       const data = extractQuestionAndAnswers();
       if (!data) return;
