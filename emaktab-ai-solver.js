@@ -6,14 +6,14 @@
     // Configuration - Add your CSS Selectors here
     // --------------------------------------------------------------------------
     const SELECTORS = {
-        QUESTION_ELEMENT: "div.spmwg > div[role='presentation'] > div > div > div > span",
-        ANSWER_ELEMENTS: "div[role='radio']",
-        ANSWER_TEXT_ELEMENT: 'span' // Span containing the answer text inside radio buttons
+        QUESTION_ELEMENT: "div.VQ5oZ > div.yoeer > span:first-child", //Targets the Question 
+        ANSWER_ELEMENTS: "div.VQ5oZ > div._ZhFj > div.YBX37",       //Targets the Answer divs
+        ANSWER_TEXT_ELEMENT: 'div[aria-readonly="true"] > p'       //Gets text in the p inside of radio button divs.
     };
 
-    // PLEASE READ THE SECURITY WARNING BELOW BEFORE USING THIS!
-    const API_KEY = "220a1d391be94cfe95d903bc21df7aaa";  // **REPLACE THIS WITH YOUR TEST API KEY**
-    const API_ENDPOINT = "https://generative-ai-fd.experimental.googleapis.com/v1beta/models/gemini-pro:generateContent";  // Replace the part of this URL after .com if needed.
+    // **Important:  This is a placeholder.  The actual API key should ONLY be on your server!**
+    const API_ENDPOINT = 'YOUR_SERVER_API_ENDPOINT';  // Update it and implement this in a secure way
+    const API_KEY = "YOUR_TEST_API_KEY";
 
     // --------------------------------------------------------------------------
     // Helper Functions
@@ -23,7 +23,7 @@
         const questionElement = document.querySelector(SELECTORS.QUESTION_ELEMENT);
         const question = questionElement ? questionElement.textContent : null;
 
-        const answerElements = Array.from(document.querySelectorAll(SELECTORS.ANSWER_ELEMENT));
+        const answerElements = Array.from(document.querySelectorAll(SELECTORS.ANSWER_ELEMENTS));
         const answers = answerElements.map(element => element.querySelector(SELECTORS.ANSWER_TEXT_ELEMENT).textContent.trim());
 
         if (!question || answers.length === 0) {
@@ -35,35 +35,16 @@
     }
 
     function highlightCorrectAnswer(correctAnswer) {
-        const answerElements = document.querySelectorAll(SELECTORS.ANSWER_ELEMENT);
+        const answerElements = document.querySelectorAll(SELECTORS.ANSWER_ELEMENTS);
 
         answerElements.forEach(element => {
-            const spanElement = element.querySelector(SELECTORS.ANSWER_TEXT_ELEMENT);
-            if (spanElement.textContent.trim() === correctAnswer.trim()) {
+            const textContainer = element.querySelector(SELECTORS.ANSWER_TEXT_ELEMENT); //Get the actual answer text container.
+            if (textContainer.textContent.trim() === correctAnswer.trim()) {
                 element.style.backgroundColor = 'lightgreen'; // Highlight the radio button div
             } else {
                 element.style.backgroundColor = ''; // Reset background color
             }
         });
-    }
-
-    function extractQuestionAndAnswers() {
-        const questionElement = document.querySelector(SELECTORS.QUESTION_ELEMENT);
-        const question = questionElement ? questionElement.textContent : null;
-
-        const answerElements = Array.from(document.querySelectorAll(SELECTORS.ANSWER_ELEMENT));
-        const answers = answerElements.map(element => element.querySelector(SELECTORS.ANSWER_TEXT_ELEMENT).textContent.trim());
-
-        console.log("Question Element:", questionElement); //ADDED
-        console.log("Answers Elements:", answerElements); //ADDED
-        console.log("Answers:", answers); //ADDED
-
-        if (!question || answers.length === 0) {
-            console.warn("Could not find question or answers.");
-            return null;
-        }
-
-        return { question, answers };
     }
 
     function analyzeAndHighlight() {
